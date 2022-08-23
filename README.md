@@ -17,8 +17,13 @@ Load fixtures (only on first launch or for testing new installations)
 $ curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/countries/_bulk --data-binary @./fixtures/countries.json
 ```
 
+Install Search app dependencies
+```shell
+$ cd ./src/Apps/Search && yarn install
+```
+
 Start search client
 ```shell
-$ cd ./src/shit && yarn dev
+$ cd ./src/Apps/Search && yarn dev
 ```
 and open localhost:3000 on your browser
