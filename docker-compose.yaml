@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  elasticsearch:
+    build:
+      context: .
+      dockerfile: ./docker/elastic_search/Dockerfile
+    environment:
+      - ES_SETTING_DISCOVERY_TYPE=single-node
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - ELASTIC_PASSWORD=1234
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./docker/elastic_search/volumes/home:/home
+      - ./docker/elastic_search/volumes/data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+        - rabbitmq
+
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: ./docker/RabbitMQ/Dockerfile
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ./docker/RabbitMQ/volumes/data:/var/lib/rabbitmq/
+        - ./docker/RabbitMQ/volumes/log:/var/log/rabbitmq/
+    networks:
+        - rabbitmq
+
+networks:
+  rabbitmq:
+    driver: bridge
