@@ -21,7 +21,7 @@ services:
       - ./docker/elastic_search/volumes/home:/home
       - ./docker/elastic_search/volumes/data:/usr/share/elasticsearch/data
     ports:
-      - "9200:9200"
+      - 9200:9200
     networks:
         - rabbitmq
 
@@ -35,9 +35,20 @@ services:
         - 15672:15672
     volumes:
         - ./docker/RabbitMQ/volumes/data:/var/lib/rabbitmq/
-        - ./docker/RabbitMQ/volumes/log:/var/log/rabbitmq/
     networks:
         - rabbitmq
+
+  search-app:
+    build: 
+      context: .
+      dockerfile: ./docker/node/Dockerfile
+    container_name: 'searchapp'
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src/Apps/Search:/home/node/app
+    networks:
+      - rabbitmq
 
 networks:
   rabbitmq:
