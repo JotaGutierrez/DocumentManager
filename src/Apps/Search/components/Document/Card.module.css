@@ -1,0 +1,8 @@
+.document {
+    transform: scale(0.95);
+    transition: all ease 125ms;
+}
+
+.active {
+    transform: scale(1);
+}

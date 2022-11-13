@@ -22,34 +22,50 @@ services:
       - ./docker/elastic_search/volumes/data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
-    networks:
-        - rabbitmq
 
   rabbitmq:
     build:
       context: .
       dockerfile: ./docker/RabbitMQ/Dockerfile
-    container_name: 'rabbitmq'
     ports:
         - 5672:5672
         - 15672:15672
-    volumes:
-        - ./docker/RabbitMQ/volumes/data:/var/lib/rabbitmq/
-    networks:
-        - rabbitmq
 
   search-app:
     build: 
       context: .
-      dockerfile: ./docker/node/Dockerfile
+      dockerfile: ./docker/searchapp/Dockerfile
     container_name: 'searchapp'
     ports:
       - 3000:3000
     volumes:
       - ./src/Apps/Search:/home/node/app
-    networks:
-      - rabbitmq
 
-networks:
-  rabbitmq:
-    driver: bridge
+  backoffice:
+    build: 
+      context: .
+      dockerfile: ./docker/backoffice/Dockerfile
+    ports:
+      - 3001:3000
+    volumes:
+      - ./src/Apps/Backoffice/ui:/home/node/app
+
+  backendapp:
+    build: 
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - ./src/Apps/Backoffice/Backend:/var/www/html
+
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: document
+    ports:
+      - 3306:3306
+    volumes:
+      - ./docker/mysql/volumes:/var/lib/mysql 

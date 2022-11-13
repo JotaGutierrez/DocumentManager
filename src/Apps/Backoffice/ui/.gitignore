@@ -33,11 +33,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-
-/src/Context
-
-/docker/*/volumes
-/**/node_modules
-/**/.next
-
-.yarn
+next-env.d.ts
