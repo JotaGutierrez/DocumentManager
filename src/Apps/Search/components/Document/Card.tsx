@@ -16,7 +16,9 @@ interface props {
 const DocumentCard = ({document, setActiveDocument, active}: props) =>
   <Card elevation={3} className={`${styles.document} ${active ? styles.active : ''}`} sx={{ minWidth: 275, minHeight: '182px' }} variant='outlined'>
     <CardHeader title={document.title} subheader={document.slug} />
-    <CardContent style={{maxHeight: '6rem', minHeight: '6rem', overflow: 'hidden', textOverflow: 'ellipsis', wordWrap: 'break-word'}}>{document.content}</CardContent>
+    <CardContent 
+      style={{maxHeight: '6rem', minHeight: '6rem', overflow: 'hidden', textOverflow: 'ellipsis', wordWrap: 'break-word'}}>{document.content}
+    </CardContent>
     <CardActionArea>
       <IconButton onClick={() => setActiveDocument(document)}>
         <LocalLibrary />

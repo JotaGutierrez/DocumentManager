@@ -1,10 +1,19 @@
+# Document Manager
+Document management and search app. This is an example monorepo of an application consisting on
 
-## Tier 1: 
-Next app querying an elastic search node running in a docker instance
-## Tier 2: 
-App posting to some sql database while elastic syncs through domain events
-## Tier 3: 
-Use a message queue (rabbitMQ) to sync databases asynchronously
+* Backend API
+* Backoffice UI
+* Front UI
+* Elasticsearch
+* MySQL
+* RabbitMQ
+
+The purpose of this project is to create a simple application using a real world arquitecture that could be used in a complex application, testable, easy to extend and ready to scale.
+
+Backend application follows Domain-Driven Design (DDD) principles, Hexagonal arquitecture and CQRS. It saves documents in MySQL and sends them asynchronously to ElasticSearch via RabbitMQ.
+
+Backoffice uses backend api to create and edit documents.
+Front UI queries ElasticSearch directly.
 
 ### Set up 
 
@@ -12,18 +21,23 @@ Use a message queue (rabbitMQ) to sync databases asynchronously
 $ docker compose up
 ```
 
-Load fixtures (only on first launch or for testing new installations)
-```shell
-$ curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/countries/_bulk --data-binary @./fixtures/countries.json
-```
+Go to localhost:3001 and create some documents
 
-Install Search app dependencies
-```shell
-$ cd ./src/Apps/Search && yarn install
-```
+At this point, they exist only in MySQL 
 
-Start search client
+Run
 ```shell
-$ cd ./src/Apps/Search && yarn dev
+$ make consume
 ```
-and open localhost:3000 on your browser
+to sync ElasticSearch and
+
+Go to localhost:3000 and search documents
+
+### Next steps
+* Author management
+* Wysiwyg content editor
+* Refactor API use in UIs
+* Add document tags to filter documents
+* User roles (Admin, Editor)
+* Backoffice authentication
+* ...
